@@ -2,7 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
+// To solve the CORS error
+app.use(
+  cors({
+    origin: 'http://127.0.0.1:5173',
+  })
+);
 app.use(express.json());
 
 const API_KEY = 'Jackie-loves-Candy';
@@ -15,7 +22,7 @@ const usersForAuth = [
 ];
 
 app.post('/signInWithPassword', (req, res) => {
-  // do not provide the authentication service
+  // To provide the authentication service
   if (!req.query || req.query.key !== API_KEY) return res.sendStatus(401);
 
   // User info for sign-in
