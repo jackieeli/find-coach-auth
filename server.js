@@ -16,15 +16,13 @@ const usersForAuth = [
 
 app.post('/signInWithPassword', (req, res) => {
   // do not provide the authentication service
-  if (!req.query || req.key !== API_KEY) return res.sendStatus(401);
+  if (!req.query || req.query.key !== API_KEY) return res.sendStatus(401);
 
   // User info for sign-in
   const user = {
     email: req.body.email,
     password: req.body.password,
   };
-
-  console.log(user);
 
   // Find out the usr if user exists throughout email
   const usr = usersForAuth.find(usr => usr.email === user.email.toLowerCase());
@@ -33,15 +31,14 @@ app.post('/signInWithPassword', (req, res) => {
 
   // User exists, but password is wrong
   if (usr.password !== user.password) return res.sendStatus(403);
-
   // The client user don't want access token
-  if (!returnSecureToken) return res.sendStatus(403);
-
+  if (!req.body.returnSecureToken) return res.sendStatus(403);
   // Successfully authenticated, send token
   const idToken = jwt.sign(
     { userID: usr.userID },
     process.env.ACCESS_TOKEN_SECRET
   );
+
   res.json({
     idToken,
     localId: usr.userID,
