@@ -15,11 +15,12 @@ app.use(express.json());
 const API_KEY = 'Jackie-loves-Candy';
 const usersForAuth = [
   {
-    userID: 1,
+    userID: 'c1',
     email: 'li.linfei@foxmail.com',
     password: '123456',
   },
 ];
+let USER_NUMS = 1;
 
 app.post('/signInWithPassword', (req, res) => {
   // To provide the authentication service
