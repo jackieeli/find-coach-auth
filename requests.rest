@@ -2,7 +2,7 @@ POST http://localhost:3000/signInWithPassword?key=Jackie-loves-Candy
 Content-Type: application/json
 
 {
-  "email": "li.linfei@foxmail.com",
-  "password": "123456",
+  "email": "Ray.Dalio@bridgewater.com",
+  "password": "Qwerty",
   "returnSecureToken": "true"
 }
