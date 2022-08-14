@@ -2,9 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
-const { createUser, fetchAllUsers } = require('./mongodb');
+
+const { API_KEY, usersInMemory, USER_NUMS } = require('./local-data');
+const { initialServer, registerUser } = require('./controller');
 
 const app = express();
+
 // To solve the CORS error
 app.use(
   cors({
@@ -13,23 +16,7 @@ app.use(
 );
 app.use(express.json());
 
-const API_KEY = 'Jackie-loves-Candy';
-let usersInMemory = [];
-let USER_NUMS = 0;
-
-async function initialServer() {
-  try {
-    usersInMemory = await fetchAllUsers();
-    USER_NUMS = usersInMemory.length;
-    // console message
-    console.log(`The Server has been initialized...`);
-    console.log(usersInMemory, USER_NUMS);
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-initialServer();
+initialServer(); // Fetching all the data from mongoDB into local-data
 
 app.post('/signInWithPassword', (req, res) => {
   // Checking api key!
@@ -84,9 +71,9 @@ app.post('/signUp', (req, res) => {
     ...user,
     userID: `c${++USER_NUMS}`,
   };
+
   // Push it into memory and mongoDB
-  usersInMemory.push(usr);
-  createUser(usr);
+  registerUser(usr);
 
   // Successfully authenticated, send token
   const idToken = jwt.sign(
